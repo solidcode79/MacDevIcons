@@ -1,0 +1,10 @@
+{
+  "command": "open -a Zed",
+
+  "extensions": {
+    "ts": "typescript",
+    "js": "javascript",
+    "json": "json",
+    "md": "markdown"
+  }
+}
