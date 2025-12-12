@@ -60,19 +60,17 @@ def pick_svg_icon(devicon_name: str) -> Path:
     if not icon_folder.exists():
         raise FileNotFoundError(f"❌ Devicon folder not found: {icon_folder}")
 
-    # Otherwise fallback to plain.svg
-    for candidate in [f"{devicon_name}-plain.svg"]:
-        path = icon_folder / candidate
-        if path.exists():
-            return path
-
     # Prefer original.svg
     for candidate in [f"{devicon_name}-original.svg"]:
         path = icon_folder / candidate
         if path.exists():
             return path
 
-
+    # Otherwise fallback to plain.svg
+    for candidate in [f"{devicon_name}-plain.svg"]:
+        path = icon_folder / candidate
+        if path.exists():
+            return path
 
     raise FileNotFoundError(
         f"No usable SVG in {icon_folder}. Expected *original.svg or *plain.svg"

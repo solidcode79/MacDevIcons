@@ -5,6 +5,18 @@
     "ts": "typescript",
     "js": "javascript",
     "json": "json",
+    "txt": "markdown",
+    "css": "css3",
+    "html": "html5",
+    "py": "python",
+    "go": "go",
+    "sh": "bash",
+    "jsx":"react",
+    "swift":"swift",
+    "xml":"xml",
+    "yaml":"yaml",
+    "docker":"docker",
+    "rs":"rust",
     "md": "markdown"
   }
 }
