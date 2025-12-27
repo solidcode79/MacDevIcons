@@ -1,7 +1,7 @@
 {
-  "command": "open -a Zed",
+  "command": "/opt/homebrew/bin/zed",
 
-  "extensions": {
+  "extensions_devIconFoldername": {
     "ts": "typescript",
     "js": "javascript",
     "json": "json",
@@ -15,8 +15,14 @@
     "swift":"swift",
     "xml":"xml",
     "yaml":"yaml",
-    "docker":"docker",
     "rs":"rust",
     "md": "markdown"
-  }
+  },
+  
+  "utis_devIconFoldername": {
+    "public.dockerfile": "docker",
+    "public.makefile": "bash",
+    "public.plain-text": "markdown",
+    "public.shell-script": "bash"
+  }  
 }

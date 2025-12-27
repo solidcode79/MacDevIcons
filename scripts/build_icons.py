@@ -16,8 +16,6 @@ BUILD_DIR = BASE_DIR / "build"
 PNG_1024_DIR = BUILD_DIR / "png_1024"
 ICONSET_DIR = BUILD_DIR / "iconsets"
 ICNS_DIR = BUILD_DIR / "icns"
-APP_ICON = BASE_DIR / "Resource" / "MacDevIcons.png"
-CONFIG_FILE = BASE_DIR / "config" / "config.json"
 
 # Required macOS icon sizes
 ICON_SIZES = [
@@ -42,14 +40,6 @@ def ensure_dirs():
     PNG_1024_DIR.mkdir(parents=True, exist_ok=True)
     ICONSET_DIR.mkdir(parents=True, exist_ok=True)
     ICNS_DIR.mkdir(parents=True, exist_ok=True)
-
-
-def load_filetype_map():
-    with open(CONFIG_FILE, "r") as f:
-        data = json.load(f)
-    
-    return data.get("extensions", {})
-
 
 def pick_svg_icon(devicon_name: str) -> Path:
     """
@@ -89,7 +79,7 @@ def convert_svg_to_1024_png(svg_path: Path, filetype: str) -> Path:
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(png_bytes)
 
-    print(f"Created PNG 1024: {out_path}")
+    #print(f"Created PNG 1024: {out_path}")
     return out_path    
 
 def create_iconset(png_1024: Path, filetype: str) -> Path:
@@ -104,7 +94,7 @@ def create_iconset(png_1024: Path, filetype: str) -> Path:
         out_file = iconset_path / filename
         resized.save(out_file)
     
-    print(f"Created iconset: {iconset_path}")
+    #print(f"Created iconset: {iconset_path}")
     return iconset_path
 
 
@@ -114,28 +104,28 @@ def convert_iconset_to_icns(iconset_path: Path, filetype: str) -> Path:
         ["iconutil", "-c", "icns", str(iconset_path), "-o", str(out_icns)],
         check=True
     )
-    print(f"Created ICNS: {out_icns}")
+    # print(f"Created ICNS: {out_icns}")
     return out_icns
 
 
-def process_filetype(filetype: str, devicon_name: str):
-    print(f"\nProcessing: {filetype} -> {devicon_name}")
+def process_all(filetype: str, devicon_name: str):
+    print(f"Processing: {filetype} -> {devicon_name}")
 
     svg_path = pick_svg_icon(devicon_name)
-    png_1024 = convert_svg_to_1024_png(svg_path, filetype)
-    iconset_path = create_iconset(png_1024, filetype)
-    convert_iconset_to_icns(iconset_path, filetype)
+    png_1024 = convert_svg_to_1024_png(svg_path, devicon_name)
+    iconset_path = create_iconset(png_1024, devicon_name)
+    convert_iconset_to_icns(iconset_path, devicon_name)
 
 
-def main():
+def build_icons_all(mapping_ext, mapping_uti):
     ensure_dirs()
-    mapping = load_filetype_map()
+    mapping = mapping_ext | mapping_uti
 
     for filetype, devicon_name in mapping.items():
         try:
-            process_filetype(filetype, devicon_name)
+            process_all(filetype, devicon_name)
         except Exception as e:
             print(f"❌ Skipping {filetype}: {e}")
+            
 
-if __name__ == "__main__":
-    main()
+

@@ -3,20 +3,10 @@ set -e
 
 # run with --debug if required!
 DEBUG=0
-APP_NAME="MacDevIcons.app"
-APP_PATH="/Applications/$APP_NAME"
-BUILD_OUTPUT="./build/$APP_NAME"
 LSREGISTER="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
+APP_NAME="MacDevIcons.app"
+BUILD_NAME="./build/MacDevIcons.app"
 
-
-for arg in "$@"; do
-    if [ "$arg" = "--debug" ]; then
-        DEBUG=1
-    fi
-done
-
-echo "Removing ./build folder..."
-rm -rf ./build
 
 if [ ! -d ".venv" ]; then
     echo "No .venv folder found. Recreating virtual environment..."
@@ -31,33 +21,16 @@ else
     source .venv/bin/activate
 fi
 
-echo "Running build scripts..."
-python3 ./scripts/build_icons.py
-echo ""
-python3 ./scripts/build_app_bundle.py
-echo ""
+python3 start.py
 
-if [ ! -d "$BUILD_OUTPUT" ]; then
-    echo "ERROR: Expected app bundle $BUILD_OUTPUT not found!"
-    exit 1
-fi
-
-# Sign the application and clear the wierdo flags!
-touch /Applications/MacDevIcons.app
-xattr -cr "$BUILD_OUTPUT"
-codesign --force --sign - "$BUILD_OUTPUT/Contents/document.wflow"
-codesign --force --sign - "$BUILD_OUTPUT"
-codesign --verify --verbose "$BUILD_OUTPUT"
- 
-echo "Copying $APP_NAME to /Applications/ ..."
+echo "Copying APP to /Applications/ ..."
 rm -rf "/Applications/$APP_NAME"
-cp -R "$BUILD_OUTPUT" /Applications/
+cp -R "$BUILD_NAME" /Applications/
 
 echo "Refreshing LaunchServices registration..."
-$LSREGISTER -v -lint -R -f "/Applications/$APP_NAME"
+$LSREGISTER -R -f "/Applications/$APP_NAME"
 
-echo "Restarting Finder and Dock to refresh icons..."
+echo "Restarting Finder to refresh icons..."
 killall Finder || true
-killall Dock || true
 
 echo "Done!"
