@@ -20,9 +20,7 @@
   },
   
   "utis_devIconFoldername": {
-    "public.dockerfile": "docker",
-    "public.makefile": "bash",
-    "public.plain-text": "markdown",
-    "public.shell-script": "bash"
+    "com.macdevicons.dockerfile": "docker",
+    "com.macdevicons.makefile": "bash"
   }  
 }

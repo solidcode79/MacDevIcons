@@ -23,9 +23,9 @@ fi
 
 python3 start.py
 
-echo "Copying APP to /Applications/ ..."
+echo "Moving APP to /Applications/ ..."
 rm -rf "/Applications/$APP_NAME"
-cp -R "$BUILD_NAME" /Applications/
+mv -f "$BUILD_NAME" /Applications/
 
 echo "Refreshing LaunchServices registration..."
 $LSREGISTER -R -f "/Applications/$APP_NAME"
